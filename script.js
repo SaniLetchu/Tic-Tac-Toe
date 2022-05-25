@@ -43,6 +43,12 @@ const gameBoard = (() => {
         return playertwo;
     }
 
+    //Returns current player one
+    const returnPlayerOne = () => {
+        return playerone;
+    }
+
+
     //Switch turns
     const switchTurn = () => {
 
@@ -69,7 +75,7 @@ const gameBoard = (() => {
         let playermodel1 = document.querySelector(".playerone");
         playermodel1.style = "transform: scale(1.5); filter: invert(53%) sepia(65%) saturate(353%) hue-rotate(128deg) brightness(95%) contrast(82%) drop-shadow(1px 1px 10px cyan)";
         playerone = player;
-        currentTurn = playerOne;
+        currentTurn = playerone;
     };
     const assignPlayerTwo = (player) => {
         if(currentTurn === playertwo) {
@@ -243,6 +249,7 @@ const gameBoard = (() => {
         assignPlayerOne,
         assignPlayerTwo,
         returnPlayerTwo,
+        returnPlayerOne,
         whoseTurn,
         switchTurn,
         resetGame,
@@ -301,6 +308,11 @@ const AI = (playerNumber, marker) => {
         gameBoard.placeMarker(starterNumber, marker);
         gameBoard.switchTurn();
         isAIThinking = false;
+        //Make AI play if it is turned on
+        if(gameBoard.whoseTurn().isAi() && gameBoard.someoneWon() == null && !gameBoard.isDraw()) {
+            isAIThinking = true;
+            setTimeout(() => {gameBoard.whoseTurn().placeCircle(); }, 2000);
+        }
         if(gameBoard.someoneWon() != null) {
             let playermodel1 = document.querySelector(".playerone");
             let playermodel2 = document.querySelector(".playertwo");
@@ -351,6 +363,7 @@ const playerTwo = Player(2, "o");
 
 //Create AI object. Only possible to play as PlayerTwo
 const playerAI = AI(2, "o");
+const playerAI1 = AI(1, "x");
 
 //Assigns the players to the gameBoard
 gameBoard.assignPlayerOne(playerOne);
@@ -364,6 +377,7 @@ resetButton.addEventListener("click", gameBoard.resetGame);
 
 //Access AI ON/OFF button
 const aiButton = document.querySelector(".aibutton");
+const aiButton1 = document.querySelector(".aibutton1");
 
 //Event listener for the AI ON/OFF button
 aiButton.addEventListener("click", ()=>{
@@ -376,6 +390,25 @@ aiButton.addEventListener("click", ()=>{
         else {
             aiButton.style = "box-shadow: 1px 1px 20px green";
             gameBoard.assignPlayerTwo(playerAI);
+        }
+        //Make AI play immediatelly if it is its turn
+        if(gameBoard.whoseTurn().isAi() && gameBoard.someoneWon() == null && !gameBoard.isDraw()) {
+            isAIThinking = true;
+            setTimeout(() => {gameBoard.whoseTurn().placeCircle(); }, 2000);
+        }
+    }
+})
+
+aiButton1.addEventListener("click", ()=>{
+    if(!isAIThinking) {
+        let currentPlayerOne = gameBoard.returnPlayerOne();
+        if(currentPlayerOne.isAi()) {
+            aiButton1.style = "box-shadow: 1px 1px 20px red";
+            gameBoard.assignPlayerOne(playerOne);
+        }
+        else {
+            aiButton1.style = "box-shadow: 1px 1px 20px green";
+            gameBoard.assignPlayerOne(playerAI1);
         }
         //Make AI play immediatelly if it is its turn
         if(gameBoard.whoseTurn().isAi() && gameBoard.someoneWon() == null && !gameBoard.isDraw()) {
