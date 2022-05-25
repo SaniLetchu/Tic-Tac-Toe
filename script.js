@@ -244,20 +244,20 @@ const Player = (playerNumber, marker) => {
     const getCurrentName = function() {
         if(playerNumber == 1) {
             let input = document.querySelector(".playeronename");
-            if(input.textContent == "") {
+            if(input.value == "") {
                 return input.getAttribute("placeholder");
             }
             else {
-                return input.textContent;
+                return input.value;
             }
         }
         else if(playerNumber == 2) {
             let input = document.querySelector(".playertwoname");
-            if(input.textContent == "") {
+            if(input.value == "") {
                 return input.getAttribute("placeholder");
             }
             else {
-                return input.textContent;
+                return input.value;
             }
         }
     };
