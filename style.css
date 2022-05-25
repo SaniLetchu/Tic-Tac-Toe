@@ -50,7 +50,7 @@ body {
 
 .main-content > div {
     background-color: #1F2833;
-    border: solid;
+    border: 1px solid;
     border-color: #45A29E;
     display: flex;
     justify-content: center;
