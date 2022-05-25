@@ -7,6 +7,11 @@ const gameBoard = (() => {
 
     //Resets the gameboard
     const resetGame = () =>  {
+
+        //Hide the victorytexts if they are visible after previous game
+        victoryone.style.visibility = "hidden";
+        victorytwo.style.visibility = "hidden";
+
         //remove all the markers from the spots
         for(let i = 1; i < 10; i++) {
             let spot = document.getElementById(`${i}`);
@@ -69,6 +74,19 @@ const gameBoard = (() => {
             return false;
         }
     };
+
+    //Checks if the game is draw
+    const isDraw = () => {
+        let countMarkers = 0;
+        for(let i = 1; i < 10; i++) {
+            let spot = document.getElementById(`${i}`);
+            countMarkers += spot.children.length;
+        }
+        if(countMarkers == 9 && someoneWon() == null) {
+            return true;
+        }
+        return false;
+    }
 
     //Checks if someone has won column wise
     const columnWin = () => {
@@ -215,7 +233,8 @@ const gameBoard = (() => {
         whoseTurn,
         switchTurn,
         resetGame,
-        someoneWon
+        someoneWon,
+        isDraw
     };
 })();
 
@@ -253,20 +272,41 @@ const playerTwo = Player(2, "o");
 gameBoard.assignPlayerOne(playerOne);
 gameBoard.assignPlayerTwo(playerTwo);
 
-//Add eventlisteners for all of the spots
-for(let i = 1; i < 10; i++) {
-    let spot = document.getElementById(`${i}`);
-    spot.addEventListener("click", ()=>{
-        if(gameBoard.isEmpty(i)) {
-            let placer = gameBoard.whoseTurn();
-            gameBoard.placeMarker(i, placer.marker);
-            gameBoard.switchTurn();
-        }
-    })
-}
-
 //Access reset button
 const resetButton = document.querySelector(".reset");
 
 //Event listener for the button to reset the board
 resetButton.addEventListener("click", gameBoard.resetGame);
+
+//Access victory texts
+const victoryone = document.querySelector(".victoryone");
+const victorytwo = document.querySelector(".victorytwo");
+
+//Hide victory texts intially
+victoryone.style.visibility = "hidden";
+victorytwo.style.visibility = "hidden";
+
+//Add eventlisteners for all of the spots
+for(let i = 1; i < 10; i++) {
+    let spot = document.getElementById(`${i}`);
+    spot.addEventListener("click", ()=>{
+        if(gameBoard.isEmpty(i) && gameBoard.someoneWon() == null) {
+            let placer = gameBoard.whoseTurn();
+            gameBoard.placeMarker(i, placer.marker);
+            gameBoard.switchTurn();
+            if(gameBoard.someoneWon() != null) {
+                let playerWhoWon = gameBoard.someoneWon();
+                if(playerWhoWon == playerOne) {
+                    let name = playerOne.getCurrentName();
+                    victoryone.textContent = `${name} has won!`
+                    victoryone.style.visibility = "visible";
+                }
+                if(playerWhoWon == playerTwo) {
+                    let name = playerTwo.getCurrentName();
+                    victorytwo.textContent = `${name} has won!`
+                    victorytwo.style.visibility = "visible";
+                }
+            }
+        }
+    })
+}
