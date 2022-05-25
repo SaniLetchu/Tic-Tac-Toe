@@ -34,6 +34,13 @@ body {
 
 .main-content > div {
     border: solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-content > div > img {
+    height: 75%;
 }
 
 .footer {
