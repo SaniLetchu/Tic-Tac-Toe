@@ -295,16 +295,22 @@ for(let i = 1; i < 10; i++) {
             gameBoard.placeMarker(i, placer.marker);
             gameBoard.switchTurn();
             if(gameBoard.someoneWon() != null) {
+                let playermodel1 = document.querySelector(".playerone");
+                let playermodel2 = document.querySelector(".playertwo");
                 let playerWhoWon = gameBoard.someoneWon();
                 if(playerWhoWon == playerOne) {
                     let name = playerOne.getCurrentName();
                     victoryone.textContent = `${name} has won!`
                     victoryone.style.visibility = "visible";
+                    playermodel1.style = "transform: scale(1.5); filter: invert(74%) sepia(71%) saturate(591%) hue-rotate(359deg) brightness(103%) contrast(104%) drop-shadow(1px 1px 10px goldenrod)";
+                    playermodel2.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
                 }
                 if(playerWhoWon == playerTwo) {
                     let name = playerTwo.getCurrentName();
                     victorytwo.textContent = `${name} has won!`
                     victorytwo.style.visibility = "visible";
+                    playermodel1.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
+                    playermodel2.style = "transform: scale(1.5); filter: invert(74%) sepia(71%) saturate(591%) hue-rotate(359deg) brightness(103%) contrast(104%) drop-shadow(1px 1px 10px goldenrod)";
                 }
             }
         }

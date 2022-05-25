@@ -6,6 +6,11 @@ p, h2 {
     color: #C5C6C7;
 }
 
+h3 {
+    font-size: 30px;
+    color: gold;
+    text-shadow: 1px 1px 15px goldenrod;
+}
 
 button {
     border: none;
@@ -31,6 +36,7 @@ button:active {
 h1 {
     color: #66FCF1;
     font-size: max(35px, 5vh);
+    text-shadow: 1px 1px 30px cyan;
 }
 
 img {
