@@ -77,10 +77,10 @@ const gameBoard = (() => {
 
     //Assign player object as a player
     const assignPlayerOne = (player) => {
-        let playermodel1 = document.querySelector(".playerone");
-        playermodel1.style = "transform: scale(1.5); filter: invert(53%) sepia(65%) saturate(353%) hue-rotate(128deg) brightness(95%) contrast(82%) drop-shadow(1px 1px 10px cyan)";
+        if(currentTurn === playerone) {
+            currentTurn = player;
+        }
         playerone = player;
-        currentTurn = playerone;
     };
     const assignPlayerTwo = (player) => {
         if(currentTurn === playertwo) {
@@ -391,6 +391,10 @@ resetButton.addEventListener("click", gameBoard.resetGame);
 const aiButton = document.querySelector(".aibutton");
 const aiButton1 = document.querySelector(".aibutton1");
 
+//Initial playermodel
+let playermodel1 = document.querySelector(".playerone");
+playermodel1.style = "transform: scale(1.5); filter: invert(53%) sepia(65%) saturate(353%) hue-rotate(128deg) brightness(95%) contrast(82%) drop-shadow(1px 1px 10px cyan)";
+
 //Event listener for the AI ON/OFF button
 aiButton.addEventListener("click", ()=>{
     if(!isAIThinking) {
@@ -429,6 +433,7 @@ aiButton1.addEventListener("click", ()=>{
         }
     }
 })
+
 
 
 //Access victory texts
