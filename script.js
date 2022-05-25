@@ -5,6 +5,20 @@ const gameBoard = (() => {
     let playertwo = null;
     let currentTurn = null;
 
+    //Resets the gameboard
+    const resetGame = () =>  {
+        //remove all the markers from the spots
+        for(let i = 1; i < 10; i++) {
+            let spot = document.getElementById(`${i}`);
+            while(spot.firstChild) {
+                spot.removeChild(spot.lastChild);
+            }
+            if(whoseTurn() == playertwo) {
+                switchTurn();
+            }
+        }
+    }
+
     //Returns the player whose turn it is
     const whoseTurn = () => {
         return currentTurn;
@@ -56,13 +70,141 @@ const gameBoard = (() => {
         }
     };
 
+    //Checks if someone has won column wise
+    const columnWin = () => {
+        for(let i = 1; i < 4; i++) {
+            let countx = 0;
+            let counto = 0;
+            for(let j = 0; j < 7; j += 3) {
+                let spotNumber = i + j;
+                let spot = document.getElementById(`${spotNumber}`);
+                if(spot.children.length != 0) {
+                    let markerUsed = spot.firstElementChild.getAttribute("class");
+                    if(markerUsed == "x") {
+                        countx += 1;
+                    }
+                    else if(markerUsed == "o") {
+                     counto += 1;
+                    }
+                }
+            }
+            console.log(countx);
+            if(countx == 3) {
+                return playerone;
+            }
+            if(counto == 3) {
+                return playertwo;
+            }
+        }
+        return null;
+    }
+
+    //Checks if someone has won row wise
+    const rowWin = () => {
+        for(let i = 1; i < 8; i += 3) {
+            let countx = 0;
+            let counto = 0;
+            for(let j = 0; j < 3; j++) {
+                let spotNumber = i + j;
+                let spot = document.getElementById(`${spotNumber}`);
+                if(spot.children.length != 0) {
+                    let markerUsed = spot.firstElementChild.getAttribute("class");
+                    if(markerUsed == "x") {
+                        countx += 1;
+                    }
+                    else if(markerUsed == "o") {
+                     counto += 1;
+                    }
+                }
+            }
+            if(countx == 3) {
+                return playerone;
+            }
+            if(counto == 3) {
+                return playertwo;
+            }
+        }
+        return null;
+    }
+
+    //Checks if someone has won diagonal wise
+    const diagonalWin = () =>  {
+
+        ///Check the first diagonal
+        let diagonalStart = 1;
+        let countx = 0;
+        let counto = 0;
+
+        for(let i = 0; i < 9; i += 4) {
+            let spotNumber = i + diagonalStart;
+            let spot = document.getElementById(`${spotNumber}`);
+            if(spot.children.length != 0) {
+                let markerUsed = spot.firstElementChild.getAttribute("class");
+                if(markerUsed == "x") {
+                    countx += 1;
+                }
+                else if(markerUsed == "o") {
+                    counto += 1;
+                }
+            }
+        }
+        if(countx == 3) {
+            return playerone;
+        }
+        if(counto == 3) {
+            return playertwo;
+        }
+
+        //Check the other diagonal
+        diagonalStart = 3;
+        countx = 0;
+        counto = 0;
+
+        for(let i = 0; i < 5; i += 2) {
+            let spotNumber = i + diagonalStart;
+            let spot = document.getElementById(`${spotNumber}`);
+            if(spot.children.length != 0) {
+                let markerUsed = spot.firstElementChild.getAttribute("class");
+                if(markerUsed == "x") {
+                    countx += 1;
+                }
+                else if(markerUsed == "o") {
+                    counto += 1;
+                }
+            }
+        }
+        if(countx == 3) {
+            return playerone;
+        }
+        if(counto == 3) {
+            return playertwo;
+        }
+        return null;
+    }
+
+    //Check if someone has won
+    const someoneWon = () => {
+        if(rowWin() != null) {
+            return rowWin();
+        }
+        if(columnWin() != null) {
+            return columnWin();
+        }
+        if(diagonalWin() != null) {
+            return diagonalWin();
+        }
+        return null;
+    }
+
     //Trys to Place marker to that spot
     const placeMarker = (spot, marker) => {
         if(isEmpty(spot)) {
             let placeHere = document.getElementById(`${spot}`);
             let markerImg = document.createElement("img");
             markerImg.setAttribute("src", `./SVG/${marker}.svg`);
+            markerImg.classList.add(`${marker}`)
             placeHere.appendChild(markerImg);
+            console.log(someoneWon());
         }
     }
     return {
@@ -71,7 +213,9 @@ const gameBoard = (() => {
         assignPlayerOne,
         assignPlayerTwo,
         whoseTurn,
-        switchTurn
+        switchTurn,
+        resetGame,
+        someoneWon
     };
 })();
 
@@ -120,3 +264,9 @@ for(let i = 1; i < 10; i++) {
         }
     })
 }
+
+//Access reset button
+const resetButton = document.querySelector(".reset");
+
+//Event listener for the button to reset the board
+resetButton.addEventListener("click", gameBoard.resetGame);

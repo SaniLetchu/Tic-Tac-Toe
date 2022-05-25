@@ -6,6 +6,27 @@ p, h2 {
     color: #C5C6C7;
 }
 
+button {
+    border: none;
+    border: 1px solid #45A29E;
+    font-size: 22px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: #C5C6C7;
+    background-color: #1F2833;
+}
+
+button:hover {
+    background-color: #2f3b4b;
+    transform: translateY(-1px);
+    border-color: #66FCF1;
+}
+
+button:active {
+    transform: translateY(1px);
+    background-color: #1F2833;
+}
+
 h1 {
     color: #66FCF1;
     font-size: max(35px, 5vh);
