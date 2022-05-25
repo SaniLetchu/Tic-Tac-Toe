@@ -30,6 +30,11 @@ const gameBoard = (() => {
                     switchTurn();
                 }
             }
+            //Make AI play if it is turned on
+            if(gameBoard.whoseTurn().isAi() && gameBoard.someoneWon() == null && !gameBoard.isDraw()) {
+                isAIThinking = true;
+                setTimeout(() => {gameBoard.whoseTurn().placeCircle(); }, 2000);
+            }
         }
     }
 
@@ -338,6 +343,14 @@ const AI = (playerNumber, marker) => {
                 playermodel1.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
                 playermodel2.style = "transform: scale(1.5); filter: invert(74%) sepia(71%) saturate(591%) hue-rotate(359deg) brightness(103%) contrast(104%) drop-shadow(1px 1px 10px goldenrod)";
             }
+            if(playerWhoWon == playerAI1) {
+                let name = playerAI1.getCurrentName();
+                victoryone.textContent = `${name} has won!`
+                victoryone.style.visibility = "visible";
+                playermodel2.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
+                playermodel1.style = "transform: scale(1.5); filter: invert(74%) sepia(71%) saturate(591%) hue-rotate(359deg) brightness(103%) contrast(104%) drop-shadow(1px 1px 10px goldenrod)";
+            }
+
         }
         if(gameBoard.isDraw()) {
             let playermodel1 = document.querySelector(".playerone");
@@ -346,7 +359,6 @@ const AI = (playerNumber, marker) => {
             playermodel1.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
 
         }
-        
     };
 
     //AI only has one name
@@ -467,6 +479,13 @@ for(let i = 1; i < 10; i++) {
                     victorytwo.style.visibility = "visible";
                     playermodel1.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
                     playermodel2.style = "transform: scale(1.5); filter: invert(74%) sepia(71%) saturate(591%) hue-rotate(359deg) brightness(103%) contrast(104%) drop-shadow(1px 1px 10px goldenrod)";
+                }
+                if(playerWhoWon == playerAI1) {
+                    let name = playerAI1.getCurrentName();
+                    victoryone.textContent = `${name} has won!`
+                    victoryone.style.visibility = "visible";
+                    playermodel2.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
+                    playermodel1.style = "transform: scale(1.5); filter: invert(74%) sepia(71%) saturate(591%) hue-rotate(359deg) brightness(103%) contrast(104%) drop-shadow(1px 1px 10px goldenrod)";
                 }
             }
             if(gameBoard.isDraw()) {
