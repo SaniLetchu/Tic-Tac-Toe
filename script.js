@@ -8,25 +8,27 @@ const gameBoard = (() => {
     //Resets the gameboard
     const resetGame = () =>  {
 
+        //Cannot reset game while AI is thinking otherwise the game bugs out
+        if(!isAIThinking) {
+            //Reset Playermodels
+            let playermodel1 = document.querySelector(".playerone");
+            let playermodel2 = document.querySelector(".playertwo");
+            playermodel1.style = "transform: scale(1.5); filter: invert(53%) sepia(65%) saturate(353%) hue-rotate(128deg) brightness(95%) contrast(82%) drop-shadow(1px 1px 10px cyan)";
+            playermodel2.style = "transform: scale(1); filter: invert(96%) sepia(4%) saturate(4%) hue-rotate(214deg) brightness(87%) contrast(81%)";
 
-        //Reset Playermodels
-        let playermodel1 = document.querySelector(".playerone");
-        let playermodel2 = document.querySelector(".playertwo");
-        playermodel1.style = "transform: scale(1.5); filter: invert(53%) sepia(65%) saturate(353%) hue-rotate(128deg) brightness(95%) contrast(82%) drop-shadow(1px 1px 10px cyan)";
-        playermodel2.style = "transform: scale(1); filter: invert(96%) sepia(4%) saturate(4%) hue-rotate(214deg) brightness(87%) contrast(81%)";
+            //Hide the victorytexts if they are visible after previous game
+            victoryone.style.visibility = "hidden";
+            victorytwo.style.visibility = "hidden";
 
-        //Hide the victorytexts if they are visible after previous game
-        victoryone.style.visibility = "hidden";
-        victorytwo.style.visibility = "hidden";
-
-        //remove all the markers from the spots
-        for(let i = 1; i < 10; i++) {
-            let spot = document.getElementById(`${i}`);
-            while(spot.firstChild) {
-                spot.removeChild(spot.lastChild);
-            }
-            if(whoseTurn() == playertwo) {
-                switchTurn();
+            //remove all the markers from the spots
+            for(let i = 1; i < 10; i++) {
+                let spot = document.getElementById(`${i}`);
+                while(spot.firstChild) {
+                    spot.removeChild(spot.lastChild);
+                }
+                if(whoseTurn() == playertwo) {
+                    switchTurn();
+                }
             }
         }
     }
