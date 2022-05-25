@@ -134,11 +134,13 @@ input[type="text"]:focus {
 }
 
 .playeroneUI > img {
-    transition: transform .4s;
+    transition: transform 1s;
+    transition: filter 1.2s;
 }
 
 .playertwoUI > img {
-    transition: transform .4s;
+    transition: transform 1s;
+    transition: filter 1.2s;
 }
 
 .footer {
@@ -146,4 +148,8 @@ input[type="text"]:focus {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.aibutton {
+    box-shadow: 1px 1px 20px red;
 }

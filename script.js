@@ -29,6 +29,11 @@ const gameBoard = (() => {
         return currentTurn;
     }
 
+    //Returns current player two
+    const returnPlayerTwo = () => {
+        return playertwo;
+    }
+
     //Switch turns
     const switchTurn = () => {
 
@@ -230,6 +235,7 @@ const gameBoard = (() => {
         isEmpty,
         assignPlayerOne,
         assignPlayerTwo,
+        returnPlayerTwo,
         whoseTurn,
         switchTurn,
         resetGame,
@@ -240,6 +246,10 @@ const gameBoard = (() => {
 
 //Factory for player
 const Player = (playerNumber, marker) => {
+
+    //Returns false everytime
+    const isAi = () => false;
+
     //Gets the current name on the input. If empty returns the placeholder value
     const getCurrentName = function() {
         if(playerNumber == 1) {
@@ -261,12 +271,34 @@ const Player = (playerNumber, marker) => {
             }
         }
     };
-    return {playerNumber, marker, getCurrentName};
+    return {playerNumber, marker, getCurrentName, isAi};
+};
+
+//Factory for AI
+const AI = (playerNumber, marker) => {
+
+    //Returns random number between 1-9
+    const random = function() {
+        return Math.floor(Math.random() * 9) + 1;
+    };
+
+    //Returns false everytime
+    const isAi = () => true;
+
+    //AI only has one name
+    const getCurrentName = function() {
+        return "AI";
+    };
+
+    return {playerNumber, marker, getCurrentName, isAi, random};
 };
 
 //Create player objects
 const playerOne = Player(1, "x");
 const playerTwo = Player(2, "o");
+
+//Create AI object. Only possible to play as PlayerTwo
+const playerAI = AI(2, "o");
 
 //Assigns the players to the gameBoard
 gameBoard.assignPlayerOne(playerOne);
@@ -277,6 +309,23 @@ const resetButton = document.querySelector(".reset");
 
 //Event listener for the button to reset the board
 resetButton.addEventListener("click", gameBoard.resetGame);
+
+//Access AI ON/OFF button
+const aiButton = document.querySelector(".aibutton");
+
+//Event listener for the AI ON/OFF button
+aiButton.addEventListener("click", ()=>{
+    let currentPlayerTwo = gameBoard.returnPlayerTwo();
+    if(currentPlayerTwo.isAi()) {
+        aiButton.style = "box-shadow: 1px 1px 20px red";
+        gameBoard.assignPlayerTwo(playerTwo);
+    }
+    else {
+        aiButton.style = "box-shadow: 1px 1px 20px green";
+        gameBoard.assignPlayerTwo(playerAI);
+    }
+})
+
 
 //Access victory texts
 const victoryone = document.querySelector(".victoryone");
@@ -312,6 +361,20 @@ for(let i = 1; i < 10; i++) {
                     playermodel1.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
                     playermodel2.style = "transform: scale(1.5); filter: invert(74%) sepia(71%) saturate(591%) hue-rotate(359deg) brightness(103%) contrast(104%) drop-shadow(1px 1px 10px goldenrod)";
                 }
+                if(playerWhoWon == playerAI) {
+                    let name = playerAI.getCurrentName();
+                    victorytwo.textContent = `${name} has won!`
+                    victorytwo.style.visibility = "visible";
+                    playermodel1.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
+                    playermodel2.style = "transform: scale(1.5); filter: invert(74%) sepia(71%) saturate(591%) hue-rotate(359deg) brightness(103%) contrast(104%) drop-shadow(1px 1px 10px goldenrod)";
+                }
+            }
+            if(gameBoard.isDraw()) {
+                let playermodel1 = document.querySelector(".playerone");
+                let playermodel2 = document.querySelector(".playertwo");
+                playermodel2.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
+                playermodel1.style = "transform: scale(1); filter: invert(31%) sepia(93%) saturate(7453%) hue-rotate(356deg) brightness(99%) contrast(124%) drop-shadow(1px 1px 10px red)"
+
             }
         }
     })
