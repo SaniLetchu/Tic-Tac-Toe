@@ -1,2 +1,2 @@
 # Tic-Tac-Toe
-Project: TIc Tac Toe from Odin Project
+Project: Tic Tac Toe from Odin Project
