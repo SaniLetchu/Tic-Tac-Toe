@@ -111,7 +111,6 @@ const gameBoard = (() => {
                     }
                 }
             }
-            console.log(countx);
             if(countx == 3) {
                 return playerone;
             }
@@ -227,7 +226,6 @@ const gameBoard = (() => {
             markerImg.setAttribute("src", `./SVG/${marker}.svg`);
             markerImg.classList.add(`${marker}`)
             placeHere.appendChild(markerImg);
-            console.log(someoneWon());
         }
     }
     return {
@@ -285,12 +283,23 @@ const AI = (playerNumber, marker) => {
     //Returns false everytime
     const isAi = () => true;
 
+    //Tries to place circle until succeeds
+    const placeCircle = function() {
+        let starterNumber = random();
+        while(!gameBoard.isEmpty(starterNumber)) {
+            starterNumber = random();
+        }
+        gameBoard.placeMarker(starterNumber, marker);
+        gameBoard.switchTurn();
+        isAIThinking = false;
+    };
+
     //AI only has one name
     const getCurrentName = function() {
         return "AI";
     };
 
-    return {playerNumber, marker, getCurrentName, isAi, random};
+    return {playerNumber, marker, getCurrentName, isAi, random, placeCircle};
 };
 
 //Create player objects
@@ -315,14 +324,21 @@ const aiButton = document.querySelector(".aibutton");
 
 //Event listener for the AI ON/OFF button
 aiButton.addEventListener("click", ()=>{
-    let currentPlayerTwo = gameBoard.returnPlayerTwo();
-    if(currentPlayerTwo.isAi()) {
-        aiButton.style = "box-shadow: 1px 1px 20px red";
-        gameBoard.assignPlayerTwo(playerTwo);
-    }
-    else {
-        aiButton.style = "box-shadow: 1px 1px 20px green";
-        gameBoard.assignPlayerTwo(playerAI);
+    if(!isAIThinking) {
+        let currentPlayerTwo = gameBoard.returnPlayerTwo();
+        if(currentPlayerTwo.isAi()) {
+            aiButton.style = "box-shadow: 1px 1px 20px red";
+            gameBoard.assignPlayerTwo(playerTwo);
+        }
+        else {
+            aiButton.style = "box-shadow: 1px 1px 20px green";
+            gameBoard.assignPlayerTwo(playerAI);
+        }
+        //Make AI play immediatelly if it is its turn
+        if(gameBoard.whoseTurn().isAi() && gameBoard.someoneWon() == null && !gameBoard.isDraw()) {
+            isAIThinking = true;
+            setTimeout(() => {gameBoard.whoseTurn().placeCircle(); }, 2000);
+        }
     }
 })
 
@@ -335,14 +351,22 @@ const victorytwo = document.querySelector(".victorytwo");
 victoryone.style.visibility = "hidden";
 victorytwo.style.visibility = "hidden";
 
+//Tells if AI is thinking. Not actually thinking. Just added delay.
+let isAIThinking = false;
+
 //Add eventlisteners for all of the spots
 for(let i = 1; i < 10; i++) {
     let spot = document.getElementById(`${i}`);
     spot.addEventListener("click", ()=>{
-        if(gameBoard.isEmpty(i) && gameBoard.someoneWon() == null) {
+        if(gameBoard.isEmpty(i) && gameBoard.someoneWon() == null && !isAIThinking) {
             let placer = gameBoard.whoseTurn();
             gameBoard.placeMarker(i, placer.marker);
             gameBoard.switchTurn();
+            //Make AI play if it is turned on
+            if(gameBoard.whoseTurn().isAi() && gameBoard.someoneWon() == null && !gameBoard.isDraw()) {
+                isAIThinking = true;
+                setTimeout(() => {gameBoard.whoseTurn().placeCircle(); }, 2000);
+            }
             if(gameBoard.someoneWon() != null) {
                 let playermodel1 = document.querySelector(".playerone");
                 let playermodel2 = document.querySelector(".playertwo");
